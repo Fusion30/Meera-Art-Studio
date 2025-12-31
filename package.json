@@ -1,0 +1,20 @@
+{
+  "name": "meera",
+  "version": "1.0.0",
+  "description": "My art website.",
+  "license": "ISC",
+  "author": "Meera",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "dev": "nodemon server.js",
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "dotenv": "^17.2.3",
+    "express": "^5.2.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.11"
+  }
+}

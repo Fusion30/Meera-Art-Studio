@@ -1,0 +1,277 @@
+html{
+    scroll-behavior: smooth;
+    box-sizing: border-box;
+    
+}
+
+*, *::before, *::after{
+    box-sizing: inherit;
+}
+body{
+    background-color: whitesmoke;
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+   color: #5f5f5f;
+}
+
+nav{
+    background-color: rgb(39, 39, 39);
+    color: whitesmoke;
+    height: 70px;
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    align-items: center;
+    position:sticky;
+    top:0;
+    z-index: 1000;
+}
+
+#nav-btns{
+    
+    display: flex;
+    gap: 15px;
+    align-items: center;
+
+}
+button{
+    background-color: whitesmoke;
+    border: none;
+    border-radius: 60px;
+ 
+    padding: 5px 15px 5px 15px ;
+    font-size: 16px;
+    
+    font-family: Arial, Helvetica, sans-serif;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: background-color 0.3s, box-shadow 0.3s, color 0.3s;
+}
+
+button:hover{
+     opacity: 0.4;   
+}
+
+
+
+.swiper-slide {
+  
+  height: 100%;
+   padding: 80px 0 80px 40px;
+    display: flex;
+    align-items: center; 
+  
+}
+
+.swiper-slide > span{
+    font-size: 60px;      
+    overflow-wrap: break-word;
+}
+
+.swiper-img{
+    max-width:  700px; 
+    object-fit: contain;  
+}
+
+
+
+  /* Make non-active slides fully hidden so only the active slide's content shows.
+   This prevents overlapping text when using the 'fade' effect. */
+.swiper-slide{
+    position: relative;
+}
+.swiper-slide:not(.swiper-slide-active){
+    visibility: hidden;
+    opacity: 0;
+    
+}
+.swiper-slide.swiper-slide-active{
+    visibility: visible;
+    opacity: 1;
+    
+}
+
+/*Why buy here section*/
+#why-buy-here{   
+    display: flex;    
+    gap: 40px;
+    padding: 40px;
+    font-size: 24px;
+    
+}
+
+#why-buy-here > h2{
+    position:sticky;
+    top:110px;
+    align-self: flex-start;
+}
+
+#features{
+    /*background-color: rgb(92, 91, 91);*/
+    display: flex;
+    flex-direction: column;
+    flex: 0.8;
+    gap: 280px;
+    
+}
+
+.features-img{
+   width: auto;
+    height: auto;
+    max-width:  700px;
+    object-fit: cover;
+    animation: fadeIn linear;
+    animation-timeline: view();
+    animation-range-start: cover;
+    animation-range-end: 700px;
+}
+
+
+
+
+@keyframes fadeIn{
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* Ensure each feature row aligns items vertically centered */
+#features > div{
+    /*background-color: wheat;*/
+    
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 8px 0;
+    
+}
+
+#features > div span{
+   
+    display: block;
+    font-size: 20px;
+    
+    margin-left: auto;
+}
+
+
+footer{
+    background-color: rgb(39, 39, 39);
+}
+/* Email subscription styles */
+#email-sub-container{
+ 
+    padding: 18px;
+    
+    color: whitesmoke;
+   
+    margin: 12px auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: flex-end;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+#email-sub-container h2{
+    
+    margin: 0 0 6px 0;
+    font-size: 18px;
+    text-align: center;
+   
+}
+
+#email-sub-container input[type="email"]{
+    
+    max-height: 35px;
+    width: 25%;
+    flex: 1 1 260px;
+    padding: 12px 14px;
+    border-radius: 10px;
+    border: 1px solid rgba(0,0,0,0.12);
+    font-size: 15px;
+    outline: none;
+    transition: box-shadow 0.18s ease, border-color 0.18s ease;
+}
+
+#email-sub-container input[type="email"]:focus{
+    box-shadow: 0 8px 22px rgba(243,156,18,0.10);
+    border-color: #f39c12;
+}
+
+#email-sub-container #sub-message{
+    
+    margin-top: 8px;
+    font-size: 13px;  
+    
+}
+
+
+
+/* Email subscription styles 
+#email-sub-container{
+    background: linear-gradient(135deg, #6d6c6b 0%, #fff0e6 100%);
+    padding: 18px;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+    max-width: 560px;
+    margin: 12px auto;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+#email-sub-container h2{
+    width: 100%;
+    margin: 0 0 6px 0;
+    font-size: 18px;
+    text-align: center;
+    color: #222;
+}
+
+#email-sub-container input[type="email"]{
+    flex: 1 1 260px;
+    padding: 12px 14px;
+    border-radius: 10px;
+    border: 1px solid rgba(0,0,0,0.12);
+    font-size: 15px;
+    outline: none;
+    transition: box-shadow 0.18s ease, border-color 0.18s ease;
+}
+
+#email-sub-container input[type="email"]:focus{
+    box-shadow: 0 8px 22px rgba(243,156,18,0.10);
+    border-color: #f39c12;
+}
+
+#email-sub-container #sub-message{
+    width: 100%;
+    margin: 8px 0 0 0;
+    font-size: 13px;
+    color: #555;
+    text-align: center;
+}
+
+/* Optional button style if you add a subscribe button */
+.subscribe-btn{
+    padding: 10px 16px;
+    border-radius: 10px;
+    background: linear-gradient(90deg, #f6ad55 0%, #ed8936 100%);
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    box-shadow: 0 8px 20px rgba(237,137,54,0.18);
+    transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+
+.subscribe-btn:hover{ transform: translateY(-3px); box-shadow: 0 12px 36px rgba(237,137,54,0.22); }
+
+@media (max-width: 480px){
+    #email-sub-container{ padding: 14px; }
+    #email-sub-container h2{ font-size: 16px; }
+    #email-sub-container input[type="email"]{ flex-basis: 100%; }
+    .subscribe-btn{ width: 100%; }
+}
