@@ -1,7 +1,7 @@
 /* Styling Swiper Slides */
-.swiper-slide {
+.swiper-1 .swiper-slide {
     background-color: violet;
-    height: 100%;
+    
     padding: 80px 0 80px 40px;
     display: flex;
     align-items: center;
@@ -11,7 +11,7 @@
     overflow: hidden; /* Prevent content from overflowing */
 }
 
-.swiper-slide > span {
+.swiper-1 .swiper-slide > span {
     font-size: 2em;
     font-style: italic;
     overflow-wrap: break-word;
@@ -20,7 +20,7 @@
     left: 40%;
 }
 
-.swiper-img {
+.swiper-1 .swiper-img {
     width: 100%; /* Ensure the image fills the container width */
     height: auto; /* Maintain aspect ratio */
     object-fit: cover; /* Scale the image to cover the container while maintaining aspect ratio */
@@ -31,19 +31,19 @@
     top:10%;
 }
 
-/* Make non-active slides fully hidden so only the active slide's content shows */
-.swiper-slide:not(.swiper-slide-active) {
+/* Make non-active slides fully hidden on the first swiper only */
+.swiper-1 .swiper-slide:not(.swiper-slide-active) {
     visibility: hidden;
     opacity: 0;
 }
 
-.swiper-slide.swiper-slide-active {
+.swiper-1 .swiper-slide.swiper-slide-active {
     visibility: visible;
     opacity: 1;
 }
 
-/* Styling Swiper Arrows */
-.swiper-button-next {
+/* Styling Swiper Arrows (scoped to first swiper) */
+.swiper-1 .swiper-button-next {
     color: #fff;
     background-color: rgba(0, 0, 0, 0.5);
     border-radius: 50%;
@@ -55,7 +55,7 @@
     transition: transform 0.3s ease, background-color 0.3s ease;
 }
 
-.swiper-button-prev {
+.swiper-1 .swiper-button-prev {
     color: #fff;
     background-color: rgba(0, 0, 0, 0.5);
     border-radius: 50%;
@@ -67,16 +67,88 @@
     transition: transform 0.3s ease, background-color 0.3s ease;
 }
 
-.swiper-button-next:hover,
-.swiper-button-prev:hover {
+.swiper-1 .swiper-button-next:hover,
+.swiper-1 .swiper-button-prev:hover {
     background-color: rgba(0, 0, 0, 0.8);
     transform: scale(1.1);
 }
 
-.swiper-button-next {
+.swiper-1 .swiper-button-next {
     right: 10px;
 }
 
-.swiper-button-prev {
+.swiper-1 .swiper-button-prev {
     left: 10px;
+}
+
+/* ---------------------------------------------- */
+
+/* Gallery Swiper (Second Swiper) */
+.swiper-2 {
+    background-color: aqua;
+    padding: 40px 0;
+}
+
+.swiper-2 .swiper-slide {
+    background-color: #cb9910;
+    height: 200px;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.swiper-2 .swiper-img {
+    background-color: blue;
+    width: 40%;
+    height:40%;
+
+    object-fit: contain;
+    object-position: center;
+}
+
+/* Navigation buttons for second swiper */
+.swiper-2 .swiper-button-next,
+.swiper-2 .swiper-button-prev {
+    color: #fff;
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.swiper-2 .swiper-button-next:hover,
+.swiper-2 .swiper-button-prev:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+    transform: scale(1.1);
+}
+
+.swiper-2 .swiper-button-next {
+    right: 10px;
+}
+
+.swiper-2 .swiper-button-prev {
+    left: 10px;
+}
+
+/* Pagination for second swiper */
+.swiper-pagination-2 {
+    bottom: 10px !important;
+}
+
+.swiper-pagination-2 .swiper-pagination-bullet {
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.swiper-pagination-2 .swiper-pagination-bullet-active {
+    background-color: rgba(0, 0, 0, 0.9);
 }
