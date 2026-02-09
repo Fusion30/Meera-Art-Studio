@@ -16,8 +16,8 @@
         <input type="text" id="media" name="media" required>
         <br><br>
 
-        <label for="type">Type:</label>
-        <input type="text" id="type" name="type" required>
+        <label for="price">Price:</label>
+        <input type="number" id="price" name="price" required>
         <br><br>
         
         <!--It is important that you use the name field value from the form in your upload function.-->
@@ -29,6 +29,10 @@
         <button type="submit">Submit</button>
     </form>
 
+    <h2>Products</h2>
+    <div id="products-root"></div>
+
     <script src="index.js"></script>
+    <script src="renderStock.js"></script>
 </body>
 </html>

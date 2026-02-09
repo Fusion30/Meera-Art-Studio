@@ -85,32 +85,62 @@
 
 /* Gallery Swiper (Second Swiper) */
 .swiper-2 {
-    background-color: aqua;
-    padding: 40px 0;
+    background-color: #3a3a3a;
+    height: auto;
+    padding: 50px 0 70px;
+    overflow: hidden;
 }
 
 .swiper-2 .swiper-slide {
-    background-color: #cb9910;
-    height: 200px;
-    padding: 20px;
+    background-color: #3d0f0f;
     display: flex;
-    align-items: center;
     justify-content: center;
-    position: relative;
-    overflow: hidden;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    align-items: center;
+    padding: 10px;
+    flex-direction: column;
+    gap: 12px;
+    height: auto;
 }
 
-.swiper-2 .swiper-img {
-    background-color: blue;
-    width: 40%;
-    height:40%;
+/* Price label (can't be on <img> directly) */
+.swiper-2 .swiper-slide::after {
+    content: "$100";
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 999px;
+    background: rgba(0, 0, 0, 0.65);
+    color: #fff;
+    font-weight: 600;
+    font-size: 14px;
+    letter-spacing: 0.2px;
+    pointer-events: none;
+}
 
+/* Note: swiper-2 HTML uses plain <img>, not .swiper-img */
+.swiper-2  img {
+    width: 100%;
+    max-width: 340px;
+    height: auto;
+    aspect-ratio: 4 / 5;
     object-fit: contain;
-    object-position: center;
+    border-radius: 6px;
+
+    /* “card” look like the reference */
+    background: #1b1b1b;
+    padding: 22px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45);
 }
+
+/*.swiper-2 .swiper-slide:not(.swiper-slide-active) {
+    visibility: hidden;
+    opacity: 0;
+}
+
+.swiper-2 .swiper-slide.swiper-slide-active {
+    visibility: visible;
+    opacity: 1;
+}*/
 
 /* Navigation buttons for second swiper */
 .swiper-2 .swiper-button-next,
@@ -124,12 +154,14 @@
     justify-content: center;
     align-items: center;
     transition: transform 0.3s ease, background-color 0.3s ease;
+    top: 50%;
+    transform: translateY(-50%);
 }
 
 .swiper-2 .swiper-button-next:hover,
 .swiper-2 .swiper-button-prev:hover {
     background-color: rgba(0, 0, 0, 0.8);
-    transform: scale(1.1);
+    transform: translateY(-50%) scale(1.1);
 }
 
 .swiper-2 .swiper-button-next {
@@ -142,7 +174,7 @@
 
 /* Pagination for second swiper */
 .swiper-pagination-2 {
-    bottom: 10px !important;
+    bottom: 18px !important;
 }
 
 .swiper-pagination-2 .swiper-pagination-bullet {
