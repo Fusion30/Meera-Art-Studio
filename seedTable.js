@@ -3,13 +3,14 @@ import { getDBConnection } from "./DB/db.js";
 export async function seedTable(publicID, req) {
 
     const db = await getDBConnection()//estb database connection
+    const { name, media, price } = req.body
     
     try {
         await db.exec('BEGIN TRANSACTION')
         await db.run(`
             INSERT INTO products (name, media, cloudinaryPublicID, price)
             VALUES (?, ?, ?, ?)`,
-            [req.body.name, req.body.media, publicID, req.body.price]
+            [name, media, publicID, price]
         )
         console.log("Data inserted successfully")
         await db.exec('COMMIT')
