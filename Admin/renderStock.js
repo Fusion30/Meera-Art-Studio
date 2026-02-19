@@ -2,15 +2,8 @@
     const root = document.getElementById('products-root')
 
     async function getProducts() {
-        const res = await fetch('/api/products')
-        const contentType = res.headers.get('content-type') || ''
-        const data = contentType.includes('application/json') ? await res.json() : await res.text()
-
-        if (!res.ok) {
-            throw new Error(typeof data === 'string' ? data : (data?.error || 'Failed to fetch products'))
-        }
-
-        return Array.isArray(data) ? data : []
+        const mod = await import('/shared/getProducts.js')
+        return mod.fetchProducts()
     }
 
     function renderProducts(products) {

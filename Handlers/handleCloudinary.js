@@ -18,22 +18,23 @@ function cloudinaryConfig() {
     isCloudinaryConfigured = true;
 }
 
-//----Resize image buffer using sharp before uploading to Cloudinary----
+//==== Resize image buffer using sharp before uploading to Cloudinary ====
 async function resizeImageBuffer(originalBuffer) {
-    // We receive the uploaded file as an in-memory Buffer (multer.memoryStorage).
-    // Before uploading to Cloudinary, resize the pixels locally using sharp.
-    // This reduces upload size/bandwidth and ensures a reasonable max dimension.
-    //
-    // Brief sharp notes (summary):
-    // - "Pipeline": the chained operations like `sharp(buf).rotate().resize(...)`.
-    // - "Lazy": sharp mostly *queues* those operations; it doesn't do the heavy work yet.
-    // - `.toBuffer()` is the step that *runs* the pipeline and returns the final processed
-    //   image bytes as a new Node.js Buffer (which we then upload to Cloudinary).
-    //
-    // Notes:
-    // - `.rotate()` auto-applies EXIF orientation so portrait photos don't upload sideways.
-    // - `fit: "inside"` preserves aspect ratio.
-    // - `withoutEnlargement: true` prevents upscaling small images.
+    /* We receive the uploaded file as an in-memory Buffer (multer.memoryStorage).
+       Before uploading to Cloudinary, resize the pixels locally using sharp.
+       This reduces upload size/bandwidth and ensures a reasonable max dimension.
+    
+       Brief sharp notes (summary):
+       - "Pipeline": the chained operations like `sharp(buf).rotate().resize(...)`.
+       - "Lazy": sharp mostly *queues* those operations; it doesn't do the heavy work yet.
+       - `.toBuffer()` is the step that *runs* the pipeline and returns the final processed
+       image bytes as a new Node.js Buffer (which we then upload to Cloudinary).
+    
+       Notes:
+       - `.rotate()` auto-applies EXIF orientation so portrait photos don't upload sideways.
+       - `fit: "inside"` preserves aspect ratio.
+       - `withoutEnlargement: true` prevents upscaling small images.
+    */
     try {
         const resizedBuffer = await sharp(originalBuffer)
             .rotate()

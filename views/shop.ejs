@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="/index.css">
+    <title>Shop - Meera</title>
+</head>
+<body>
+    <header>
+        <nav>
+            <h1>Meera</h1>
+            <div id="nav-btns">
+                <a href="/shop">Shop</a>
+                <a href="/#contact">Contact</a>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section id="shop">
+            <div id="public-products-root" class="products-list">
+                <% 
+                    // If there are no products, use 10 sample image URLs for testing.
+                    const sampleImages = [
+                        'https://picsum.photos/seed/pic1/800/600',
+                        'https://picsum.photos/seed/pic2/800/600',
+                        'https://picsum.photos/seed/pic3/800/600',
+                        'https://picsum.photos/seed/pic4/800/600',
+                        'https://picsum.photos/seed/pic5/800/600',
+                        'https://picsum.photos/seed/pic6/800/600',
+                        'https://picsum.photos/seed/pic7/800/600',
+                        'https://picsum.photos/seed/pic8/800/600',
+                        'https://picsum.photos/seed/pic9/800/600',
+                        'https://picsum.photos/seed/pic10/800/600'
+                    ];
+
+                    const items = sampleImages.map((url, i) => ({
+                        imageUrl: url,
+                        name: `Sample ${i + 1}`,
+                        price: '',
+                        media: ''
+                    }));
+                %>
+
+                <% items.forEach(function(p) { %>
+                    <div class="product-card">
+                        <div class="img-wrap">
+                            <img src="<%= p.imageUrl %>" alt="<%= p.name %>" class="product-img" loading="lazy" />
+                        </div>
+                        <h3><%= p.name || 'Untitled' %></h3>
+                        <p><%= p.price != null ? `₹${p.price}` : '' %></p>
+                        <p class="product-media"><%= p.media || '' %></p>
+                    </div>
+                <% }) %>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>© 2026 Meera. All rights reserved.</p>
+    </footer>
+</body>
+</html>

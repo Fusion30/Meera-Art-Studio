@@ -11,28 +11,30 @@ const app = express(); // Creating an instance of express class
 app.use(cors());
 app.use(express.json()); // Middleware to parse JSON bodies
 
+// Set up EJS view engine to render server-side shop page
+app.set('view engine', 'ejs')
+app.set('views', 'views')
+
 const upload = multer({ storage: multer.memoryStorage() }); // Initialize multer for parsing multipart/form-data
 
-//-----Static-Files-Serving-----
+//==== Static-Files-Serving ====
 app.use(express.static("Public")); 
 app.use("/admin", express.static("Admin"));
 
-//-------Upload-Endpoint-------
+//===== Upload-Endpoint =====
 app.post('/painting-upload', upload.single('uploaded-file'), handleUploadToCloudinary);
-/*In multer -- upload.single('uploaded-file') puts the uploaded file on req.file.
-Because we r using multer.memoryStorage(), the actual file bytes are in req.file.buffer.*/
-
+/* In multer -- upload.single('uploaded-file') puts the uploaded file on req.file.
+   Because we r using multer.memoryStorage(), the actual file bytes are in req.file.buffer.*/
 /* Responses (from handleUploadToCloudinary):
  - 200 { message: "Image uploaded to cloudinary and data added to database" }
  - 400 { error: "No file received. Field name must be 'uploaded-file'." }
  - 500 { error: "Failed to upload painting" } */
- 
-//---------------------------------------------------------------------------
 
-//-----Email-Subscription-Endpoint-----
+ 
+//==== Email-Subscription-Endpoint ====
 app.post('/subscribe', brevoSub);
 
-//-----Products API-----
+//==== Products API ====
 app.get('/api/products', async (req, res) => {
     const db = await getDBConnection();
     try {
@@ -41,6 +43,21 @@ app.get('/api/products', async (req, res) => {
     } catch (err) {
         console.error('Error fetching products:', err);
         res.status(500).json({ error: 'Failed to fetch products' });
+    } finally {
+        await db.close();
+    }
+});
+
+// Server-rendered shop page using EJS
+app.get('/shop', async (req, res) => {
+    const db = await getDBConnection();
+    try {
+        const products = await db.all('SELECT * FROM products ORDER BY id DESC');
+        // Render views/shop.ejs and pass products
+        res.render('shop', { products });
+    } catch (err) {
+        console.error('Error rendering shop:', err);
+        res.status(500).send('Failed to render shop');
     } finally {
         await db.close();
     }
