@@ -155,6 +155,60 @@ footer{
     min-height: 44px;
 }
 
+.google-user-card{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 14px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: 16px;
+}
+
+.google-user-picture{
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    object-fit: cover;
+    background: rgba(255, 255, 255, 0.12);
+}
+
+.google-user-copy{
+    flex: 1;
+    min-width: 0;
+}
+
+.google-user-name,
+.google-user-email{
+    margin: 0;
+}
+
+.google-user-name{
+    color: #fff;
+    font-weight: 600;
+}
+
+.google-user-email{
+    color: rgba(255, 255, 255, 0.74);
+    font-size: 0.9rem;
+    overflow-wrap: anywhere;
+}
+
+.google-logout-button{
+    border: none;
+    border-radius: 999px;
+    padding: 10px 14px;
+    background: #ffffff;
+    color: #202124;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.google-logout-button:hover{
+    opacity: 0.9;
+}
+
 .google-signin-hint{
     margin: 0;
     color: rgba(255, 255, 255, 0.68);

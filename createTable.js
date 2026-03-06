@@ -13,8 +13,19 @@ await db.exec(`
     )
     `)
 
+await db.exec(`
+    CREATE TABLE IF NOT EXISTS users (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        googleId TEXT NOT NULL UNIQUE,
+        email TEXT,
+        name TEXT,
+        picture TEXT,
+        createdAt TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+    )
+    `)
+
 await db.close()
-    console.log("Table created successfully")
+    console.log("Tables created successfully")
 }
 
 createTable()
