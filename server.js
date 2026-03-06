@@ -10,10 +10,25 @@ dotenv.config();
 const app = express(); // Creating an instance of express class
 app.use(cors());
 app.use(express.json()); // Middleware to parse JSON bodies
+app.use(express.urlencoded({ extended: true }));
 
 // Set up EJS view engine to render server-side shop page
 app.set('view engine', 'ejs')
 app.set('views', 'views')
+
+app.get('/', (req, res) => {
+    res.render('index');
+});
+
+app.post('/auth/google', (req, res) => {
+    const hasCredential = Boolean(req.body?.credential);
+
+    if (!hasCredential) {
+        return res.status(400).send('Google credential missing.');
+    }
+
+    res.send('Google sign-in reached the server. Token verification will be added next.');
+});
 
 const upload = multer({ storage: multer.memoryStorage() }); // Initialize multer for parsing multipart/form-data
 
@@ -22,7 +37,7 @@ app.use(express.static("Public"));
 app.use("/admin", express.static("Admin"));
 
 //===== Upload-Endpoint =====
-app.post('/painting-upload', upload.single('uploaded-file'), handleUploadToCloudinary);
+app.post('/api/painting-upload', upload.single('uploaded-file'), handleUploadToCloudinary);
 /* In multer -- upload.single('uploaded-file') puts the uploaded file on req.file.
    Because we r using multer.memoryStorage(), the actual file bytes are in req.file.buffer.*/
 /* Responses (from handleUploadToCloudinary):
@@ -32,7 +47,7 @@ app.post('/painting-upload', upload.single('uploaded-file'), handleUploadToCloud
 
  
 //==== Email-Subscription-Endpoint ====
-app.post('/subscribe', brevoSub);
+app.post('/api/subscribe', brevoSub);
 
 //==== Products API ====
 app.get('/api/products', async (req, res) => {

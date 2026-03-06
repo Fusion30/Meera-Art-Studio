@@ -1,7 +1,6 @@
 import { v2 as cloudinary } from 'cloudinary'
 import { Readable } from "stream";
 import sharp from "sharp";
-import { seedTable } from '../seedTable.js'
 
 let isCloudinaryConfigured = false;
 
@@ -18,45 +17,6 @@ function cloudinaryConfig() {
     isCloudinaryConfigured = true;
 }
 
-//==== Resize image buffer using sharp before uploading to Cloudinary ====
-async function resizeImageBuffer(originalBuffer) {
-    /* We receive the uploaded file as an in-memory Buffer (multer.memoryStorage).
-       Before uploading to Cloudinary, resize the pixels locally using sharp.
-       This reduces upload size/bandwidth and ensures a reasonable max dimension.
-    
-       Brief sharp notes (summary):
-       - "Pipeline": the chained operations like `sharp(buf).rotate().resize(...)`.
-       - "Lazy": sharp mostly *queues* those operations; it doesn't do the heavy work yet.
-       - `.toBuffer()` is the step that *runs* the pipeline and returns the final processed
-       image bytes as a new Node.js Buffer (which we then upload to Cloudinary).
-    
-       Notes:
-       - `.rotate()` auto-applies EXIF orientation so portrait photos don't upload sideways.
-       - `fit: "inside"` preserves aspect ratio.
-       - `withoutEnlargement: true` prevents upscaling small images.
-    */
-    try {
-        const resizedBuffer = await sharp(originalBuffer)
-            .rotate()
-            .resize({
-                width: 1600,
-                height: 1600,
-                fit: "inside",
-                withoutEnlargement: true,
-            })
-            // `.toBuffer()` runs the pipeline and returns the processed image bytes.
-            .toBuffer();
-
-        console.log("Resized image buffer created successfully");
-        return resizedBuffer;
-    } catch (err) {
-        console.error("Error resizing image buffer:", err);
-        // Re-throw so the upload handler can return a 500 instead of uploading `undefined`.
-        throw err;
-    }
-}
-
-//----Upload the resized image buffer to Cloudinary using a stream----
 async function convertBuffer(buffer) {
     //The method returns a stream, so for simplicity
     //we wrap it in a Promise
@@ -65,34 +25,85 @@ async function convertBuffer(buffer) {
             if (err) return reject(err)
             resolve(result)
         })
-        // Convert the buffer to a readable stream and pipe it to Cloudinary's upload stream.
-        // This uploads image bytes directly from memory without writing to disk.
+        // Convert the buffer to a readable stream and pipe it to Cloudinary's upload stream
+        // This allows us to upload the image data directly from memory without writing to disk
         Readable.from(buffer).pipe(uploadStream)
     })
 }
 
-//----Main handler function for uploading to Cloudinary----
+const CLOUDINARY_FREE_UPLOAD_LIMIT_BYTES = 10 * 1024 * 1024;
+
+async function ensureUnderCloudinaryLimit(buffer) {
+    if (buffer.length <= CLOUDINARY_FREE_UPLOAD_LIMIT_BYTES) {
+        return { buffer, converted: false, format: null };
+    }
+
+    // If the original file is too large for your Cloudinary plan,
+    // we must shrink it BEFORE upload. Cloudinary transformations happen AFTER upload.
+    const attempts = [
+        { max: 2400, quality: 55 },
+        { max: 2000, quality: 50 },
+        { max: 1600, quality: 45 },
+        { max: 1400, quality: 40 }
+    ];
+
+    for (const attempt of attempts) {
+        const out = await sharp(buffer, { failOnError: false })
+            .rotate()
+            .resize({ width: attempt.max, height: attempt.max, fit: "inside", withoutEnlargement: true })
+            .avif({ quality: attempt.quality, effort: 4 })
+            .toBuffer();
+
+        if (out.length <= CLOUDINARY_FREE_UPLOAD_LIMIT_BYTES) {
+            return { buffer: out, converted: true, format: "avif" };
+        }
+    }
+
+    return { buffer: null, converted: true, format: "avif" };
+}
+
 export async function handleUploadToCloudinary(req, res) {
     cloudinaryConfig()
 
-    //optional-chaining
     if (!req.file?.buffer) {
-        // Response: 400 Bad Request
         return res.status(400).json({ error: "No file received. Field name must be 'uploaded-file'." });
     }
 
     try {
-        // 1) Resize the uploaded image buffer locally (sharp)
-        // 2) Upload the resized buffer to Cloudinary
-        const resizedBuffer = await resizeImageBuffer(req.file.buffer);
-        const result = await convertBuffer(resizedBuffer)
-        console.log(result)
-        await seedTable(result.public_id, req)
-        // Response: 200 OK
-        res.json({ message: "Image uploaded to cloudinary and data added to database" })
+        const originalBytes = req.file.buffer.length;
+
+        const processed = await ensureUnderCloudinaryLimit(req.file.buffer);
+        if (!processed.buffer) {
+            return res.status(413).json({
+                error: "Image is too large even after compression. Try a smaller image.",
+                originalBytes
+            });
+        }
+
+        const result = await convertBuffer(processed.buffer);
+
+        // Best practice: store `public_id` in DB, and generate optimized URLs on-demand.
+        const optimizedUrl = cloudinary.url(result.public_id, {
+            secure: true,
+            transformation: [{ quality: "auto", fetch_format: "auto" }]
+        });
+
+        res.json({
+            message: "Image uploaded to Cloudinary",
+            upload: {
+                public_id: result.public_id,
+                bytesUploaded: result.bytes,
+                originalBytes,
+                convertedBeforeUpload: processed.converted,
+                convertedFormat: processed.format
+            },
+            urls: {
+                original: result.secure_url,
+                optimized: optimizedUrl
+            }
+        });
     } catch (error) {
         console.error("Error uploading painting:", error);
-        // Response: 500 Internal Server Error
         res.status(500).json({ error: "Failed to upload painting" });
     }
 }

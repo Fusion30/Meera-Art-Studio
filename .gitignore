@@ -9,7 +9,7 @@ lerna-debug.log*
 
 # Node modules
 node_modules/
-
+Admin/
 # Environment variables
 .env
 

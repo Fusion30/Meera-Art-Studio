@@ -117,6 +117,50 @@ footer{
     background-color: rgb(39, 39, 39);
 }
 
+#google-signin-section{
+    color: whitesmoke;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 24px;
+    padding: 28px 18px 10px;
+    margin: 0 auto;
+    max-width: 1100px;
+}
+
+.google-signin-copy{
+    max-width: 520px;
+}
+
+.google-signin-copy > h2{
+    margin: 0 0 8px;
+    font-size: 1.4rem;
+}
+
+.google-signin-copy > p{
+    margin: 0;
+    color: rgba(255, 255, 255, 0.78);
+    line-height: 1.5;
+}
+
+.google-signin-card{
+    min-width: 280px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+}
+
+.google-signin-card > .g_id_signin{
+    min-height: 44px;
+}
+
+.google-signin-hint{
+    margin: 0;
+    color: rgba(255, 255, 255, 0.68);
+    font-size: 0.9rem;
+}
+
 /* Email subscription styles */
 #email-sub-container{
  
@@ -184,6 +228,16 @@ footer{
 
 
 @media (max-width: 480px){
+    #google-signin-section{
+        flex-direction: column;
+        align-items: stretch;
+        padding-top: 22px;
+    }
+
+    .google-signin-card{
+        min-width: auto;
+    }
+
     #email-sub-container{ padding: 14px; }
     #email-sub-container h2{ font-size: 16px; }
     #email-sub-container input[type="email"]{ flex-basis: 100%; }

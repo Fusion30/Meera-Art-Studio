@@ -4,7 +4,7 @@ form.addEventListener('submit', async (event) => {
     event.preventDefault()
     const formData = new FormData(form);
     try {
-        const res = await fetch("/painting-upload", {
+        const res = await fetch("/api/painting-upload", {
             method: "POST",
             body: formData
         });
